@@ -30,6 +30,12 @@ jobs:
       - name: Build React app
         run: npm run build
 
+      - name: Verificar carpeta build
+        run: |
+          echo "Contenido de la carpeta build:"
+          ls -la build
+
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
