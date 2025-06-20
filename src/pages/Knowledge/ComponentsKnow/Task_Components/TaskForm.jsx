@@ -472,7 +472,6 @@ const TaskForm = ({ onClose, onSave, users, taskToEdit }) => {
               <button type="submit" className="btn btn-primary">
                 <FiSave className="me-1" /> Guardar
               </button>
-
             </div>
           </form>
         </div>

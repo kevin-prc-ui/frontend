@@ -20,7 +20,7 @@ export const Incidencias = () => {
 
   useEffect(() => {
     fetchIncidencias();
-  }, []); // El console.log aquí mostrará el estado inicial (array vacío)
+  }, []);
 
   const fetchIncidencias = async () => {
     try {

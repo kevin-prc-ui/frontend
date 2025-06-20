@@ -38,8 +38,7 @@ const Dashboard = () => {
 };
 
 const AuthPrompt = () => {
-  const { handleLogin, valor } = UseLoginHandler();
-  console.log(valor);
+  const { handleLogin } = UseLoginHandler();
 
   return (
     <>
@@ -117,7 +116,6 @@ const ProfileContent = () => {
       const responseUser = await getUserId(userEmail);
       const userId = responseUser.data;
       const response = await listTicketsByUser(userId, page, "", size);
-      console.log(response.data);
 
       setTickets(response.data.content);
       setTotalPages(response.data.totalPages);

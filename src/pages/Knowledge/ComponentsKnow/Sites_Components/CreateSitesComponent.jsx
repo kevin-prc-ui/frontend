@@ -200,76 +200,9 @@ export const CreateSitesComponent = ({ addSite, onClick }) => {
                         {u.nombre} {u.apellido}
                       </span>
                     ))}
-                    Mantén Ctrl/Cmd para seleccionar múltiples usuarios.
+                  Mantén Ctrl/Cmd para seleccionar múltiples usuarios.
                 </div>
               </Form.Group>
-
-              <Row className="mb-4">
-                <Col>
-                  <h5 className="fw-bold text-primary">
-                    <i className="bi bi-eye-fill me-2"></i>
-                    Configuración de Visibilidad
-                  </h5>
-                  <div className="ps-4">
-                    <Form.Check
-                      type="radio"
-                      id="visibility-public"
-                      name="visibility"
-                      label={
-                        <>
-                          <span className="fw-bold">Público</span>
-                          <div className="text-muted small ms-3">
-                            Todos en tu organización pueden acceder a este
-                            sitio.
-                          </div>
-                        </>
-                      }
-                      value="Public"
-                      checked={siteData.visibility === "Public"}
-                      onChange={handleInputChange}
-                      className="mb-2"
-                    />
-
-                    <Form.Check
-                      type="radio"
-                      id="visibility-moderated"
-                      name="visibility"
-                      label={
-                        <>
-                          <span className="fw-bold">Moderado</span>
-                          <div className="text-muted small ms-3">
-                            Todos pueden encontrar este sitio y solicitar
-                            acceso. El acceso es dado por los Administradores.
-                          </div>
-                        </>
-                      }
-                      value="Moderated"
-                      checked={siteData.visibility === "Moderated"}
-                      onChange={handleInputChange}
-                      className="mb-2"
-                    />
-
-                    <Form.Check
-                      type="radio"
-                      id="visibility-private"
-                      name="visibility"
-                      label={
-                        <>
-                          <span className="fw-bold">Privado</span>
-                          <div className="text-muted small ms-3">
-                            Solo personas añadidas por un Administrador pueden
-                            encontrar y usar este sitio.
-                          </div>
-                        </>
-                      }
-                      value="Private"
-                      checked={siteData.visibility === "Private"}
-                      onChange={handleInputChange}
-                      className="mb-2"
-                    />
-                  </div>
-                </Col>
-              </Row>
             </Container>
           </Modal.Body>
           <Modal.Footer className="bg-light">

@@ -9,25 +9,23 @@ import { postIp } from "../../services/IpService";
 export const UseLoginHandler = () => {
   const navigate = useNavigate();
   const { instance } = useMsal();
-  var valor=false;
-  
+
   const handleLogin = async () => {
     // 1. Autenticación con Microsoft
     const response = await instance.loginPopup(loginRequest);
     const graphResponse = await callMsGraph(response.accessToken);
-    
+
     // 2. Preparar datos para el backend
     const loginData = {
       email: graphResponse.userPrincipalName,
       password: graphResponse.id,
     };
-    
+
     // 3. Login en tu backend
     try {
       const respuesta = await login(loginData);
       localStorage.setItem("authToken", JSON.stringify(respuesta.data));
       const roles = await getUserRoles();
-      valor=true;
       // 4. Postear Ip en backend
       const ipResponse = await fetch("https://api.ipify.org/?format=json");
       const data = await ipResponse.json();

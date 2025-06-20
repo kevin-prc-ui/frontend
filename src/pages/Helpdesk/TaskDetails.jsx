@@ -14,7 +14,11 @@ import {
   FaPencilAlt,
 } from "react-icons/fa";
 import ChatContainer from "../../components/Chat/ChatContainer";
-import { getBadgeColor, getPriorityColor, getVencimiento } from "../../utils/utils";
+import {
+  getBadgeColor,
+  getPriorityColor,
+  getVencimiento,
+} from "../../utils/utils";
 import CreateTicket from "../../components/Ticket/CreateTicket";
 import { getPermisos } from "../../services/UsuarioService";
 
@@ -67,8 +71,6 @@ const TaskDetails = () => {
 
   const editarTicket = () => {
     permisos.map((permiso) => {
-      console.log(permiso.nombre);
-      
       if (permiso.nombre.includes("EDITAR_TICKET")) {
         setOpenDialog(true);
       }

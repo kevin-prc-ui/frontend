@@ -185,7 +185,6 @@ const ChatComponent = ({
   const handleDownloadAttachment = useCallback(
     async (attachmentUrl, attachmentFilename) => {
       const token = getAuthToken();
-      console.log("Token:", token);
 
       const baseUrl = import.meta.env.VITE_BASE_URL;
       try {
@@ -299,7 +298,6 @@ const ChatComponent = ({
           </div>
         ) : (
           messages.map((msg) => {
-            // console.log("Rendering message:", msg); // Log para depuración
             // Asegurarse de que msg y msg.sender existan antes de acceder a propiedades
             const senderId = msg.sender?.id;
             const senderName =

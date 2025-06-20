@@ -19,23 +19,20 @@ import { formatUserRole } from "../../utils/utils";
  */
 const Perfil = () => {
   const [usuario, setUsuario] = useState(null);
-  
 
   useEffect(() => {
     fetchUsuario();
-    console.log();
-    
   }, []);
-  
+
   const fetchUsuario = async () => {
     try {
       const response = await getUserByEmail();
-      setUsuario(response.data);    
+      setUsuario(response.data);
     } catch (err) {
       console.error(err);
     }
   };
-  
+
   const userData = {
     nombre: usuario?.nombre || "No se encontraron datos.",
     apellido: usuario?.apellido || "No se encontraron datos.",
@@ -47,7 +44,6 @@ const Perfil = () => {
     roles: usuario?.roles || ["Sin roles asignados"],
     permisos: usuario?.permisos || ["Sin permisos asignados"],
   };
-
 
   if (!userData) {
     return (
@@ -100,8 +96,7 @@ const Perfil = () => {
           icon={<FiShield className="text-green-500" />}
         >
           {roles && roles.length > 0 ? (
-            roles.map((rol, index) => 
-              (
+            roles.map((rol, index) => (
               <Pill
                 key={`rol-${index}`}
                 text={formatUserRole(rol)}

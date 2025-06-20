@@ -31,8 +31,6 @@ const MisArchivos = () => {
     getFilteredItems,
   } = useFileManager();
 
-  console.log(items);
-
   return (
     <>
       <div className="top-bar">
@@ -147,14 +145,12 @@ const MisArchivos = () => {
                       <>
                         <button
                           className="btn btn-sm favorite-btn"
-                        
                           title={
                             favorites.includes(item.id)
                               ? "Marcar a Ivan Sistemas "
                               : "Marcar a Eduardo Sistemas"
                           }
-                        >
-                        </button>
+                        ></button>
                         <a
                           href={getArchivoUrl(item.id)}
                           download

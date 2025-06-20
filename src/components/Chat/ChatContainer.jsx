@@ -87,21 +87,16 @@ const ChatContainer = ({ ticketId, chatId }) => {
       connectHeaders: {
         Authorization: `Bearer ${authTokenString}`, // Usar el token string directamente
       },
-      debug: (str) => {
-        /* console.log("STOMP: " + str); */
-      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: (frame) => {
-        console.log("ChatContainer: WebSocket conectado:", frame);
         setIsConnected(true);
         setIsConnecting(false);
         setConnectionError(null);
         stompClientRef.current = client;
 
         const topic = `${CHAT_SUB_TOPIC_PREFIX}${chatId}`;
-        console.log(`ChatContainer: Suscribiendo a ${topic}`);
         if (subscriptionRef.current) {
           subscriptionRef.current.unsubscribe();
         }
@@ -110,10 +105,6 @@ const ChatContainer = ({ ticketId, chatId }) => {
           (message) => {
             try {
               const receivedMessage = JSON.parse(message.body);
-              console.log(
-                "ChatContainer: Mensaje STOMP recibido:",
-                receivedMessage
-              );
               setMessages((prevMessages) => {
                 if (prevMessages.some((msg) => msg.id === receivedMessage.id)) {
                   return prevMessages;
@@ -137,7 +128,6 @@ const ChatContainer = ({ ticketId, chatId }) => {
         loadChatHistory();
       },
       onDisconnect: (frame) => {
-        console.log("ChatContainer: WebSocket desconectado:", frame);
         setIsConnected(false);
         setIsConnecting(false);
         if (stompClientRef.current) {
@@ -169,9 +159,7 @@ const ChatContainer = ({ ticketId, chatId }) => {
     client.activate();
 
     return () => {
-      console.log("ChatContainer: Limpieza para ticket ID:", ticketId);
       if (stompClientRef.current?.active) {
-        console.log("ChatContainer: Desactivando cliente STOMP.");
         stompClientRef.current.deactivate();
       }
       stompClientRef.current = null;
@@ -200,9 +188,6 @@ const ChatContainer = ({ ticketId, chatId }) => {
       const fileToSend = files && files.length > 0 ? files[0] : null;
 
       try {
-        console.log(
-          `ChatContainer: Enviando mensaje HTTP POST para ticket ${ticketId}`
-        );
         // postChatMessage en ChatService.js ya debe manejar la autenticación
         // El backend espera ChatMessageCreateDto que solo tiene 'content'.
         // El 'ticketId' va en la URL. El 'file' se maneja como Multipart.
