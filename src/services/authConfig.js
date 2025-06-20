@@ -3,7 +3,7 @@ export const msalConfig = {
     clientId: "542b1ade-0aac-497a-9646-fb7f45a577b9",
     authority:
       "https://login.microsoftonline.com/410adee4-b811-40a9-8a94-49b729819135",
-    redirectUri: "https://gray-meadow-01828ba0f.2.azurestaticapps.net",
+    redirectUri: "https://mds.serdi.com.mx",
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
