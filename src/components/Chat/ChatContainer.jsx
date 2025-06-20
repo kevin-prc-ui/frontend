@@ -10,7 +10,7 @@ import { toast } from "sonner"; // Para notificaciones
 import { getAuthToken as getTokenFromAuthService } from "../../services/AuthService.js"; // Importa y renombra
 
 // --- Configuración WebSocket ---
-const WEBSOCKET_URL = "http://localhost:8080/ws"; // Tu endpoint WebSocket
+const WEBSOCKET_URL = import.meta.env.VITE_WS_BASE_URL;
 const CHAT_SUB_TOPIC_PREFIX = "/ticket/chat/"; // Prefijo del topic de suscripción
 
 const ChatContainer = ({ ticketId, chatId }) => {
@@ -35,8 +35,8 @@ const ChatContainer = ({ ticketId, chatId }) => {
     try {
       const response = await listMessages(ticketId);
       if (response.data?.content) {
-        const sortedMessages = response.data.content.sort((a, b) =>
-          new Date(a.timestamp) - new Date(b.timestamp)
+        const sortedMessages = response.data.content.sort(
+          (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
         );
         setMessages(sortedMessages);
       } else {
@@ -44,7 +44,8 @@ const ChatContainer = ({ ticketId, chatId }) => {
       }
     } catch (error) {
       console.error("Error cargando mensajes:", error);
-      const errorMsg = error.response?.data?.message || "Error al cargar el historial.";
+      const errorMsg =
+        error.response?.data?.message || "Error al cargar el historial.";
       setConnectionError(errorMsg);
       toast.error(errorMsg);
       setMessages([]);
@@ -72,11 +73,13 @@ const ChatContainer = ({ ticketId, chatId }) => {
 
     const authTokenString = getTokenFromAuthService(); // Obtener el token string
     if (!authTokenString) {
-        console.error("ChatContainer: No se pudo obtener el token de autenticación para WebSocket.");
-        setConnectionError("Autenticación requerida para el chat.");
-        setIsConnecting(false);
-        setIsConnected(false);
-        return;
+      console.error(
+        "ChatContainer: No se pudo obtener el token de autenticación para WebSocket."
+      );
+      setConnectionError("Autenticación requerida para el chat.");
+      setIsConnecting(false);
+      setIsConnected(false);
+      return;
     }
 
     const client = new Client({
@@ -84,7 +87,9 @@ const ChatContainer = ({ ticketId, chatId }) => {
       connectHeaders: {
         Authorization: `Bearer ${authTokenString}`, // Usar el token string directamente
       },
-      debug: (str) => { /* console.log("STOMP: " + str); */ },
+      debug: (str) => {
+        /* console.log("STOMP: " + str); */
+      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -100,29 +105,43 @@ const ChatContainer = ({ ticketId, chatId }) => {
         if (subscriptionRef.current) {
           subscriptionRef.current.unsubscribe();
         }
-        subscriptionRef.current = client.subscribe(topic, (message) => {
-          try {
-            const receivedMessage = JSON.parse(message.body);
-            console.log("ChatContainer: Mensaje STOMP recibido:", receivedMessage);
-            setMessages((prevMessages) => {
-              if (prevMessages.some(msg => msg.id === receivedMessage.id)) {
-                return prevMessages;
-              }
-              const newMessages = [...prevMessages, receivedMessage];
-              return newMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-            });
-          } catch (e) {
-            console.error("ChatContainer: Error parseando mensaje STOMP:", e, message.body);
-            toast.error("Error al procesar mensaje recibido.");
-          }
-        }, { id: `sub-chat-${chatId}` });
+        subscriptionRef.current = client.subscribe(
+          topic,
+          (message) => {
+            try {
+              const receivedMessage = JSON.parse(message.body);
+              console.log(
+                "ChatContainer: Mensaje STOMP recibido:",
+                receivedMessage
+              );
+              setMessages((prevMessages) => {
+                if (prevMessages.some((msg) => msg.id === receivedMessage.id)) {
+                  return prevMessages;
+                }
+                const newMessages = [...prevMessages, receivedMessage];
+                return newMessages.sort(
+                  (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+                );
+              });
+            } catch (e) {
+              console.error(
+                "ChatContainer: Error parseando mensaje STOMP:",
+                e,
+                message.body
+              );
+              toast.error("Error al procesar mensaje recibido.");
+            }
+          },
+          { id: `sub-chat-${chatId}` }
+        );
         loadChatHistory();
       },
       onDisconnect: (frame) => {
         console.log("ChatContainer: WebSocket desconectado:", frame);
         setIsConnected(false);
         setIsConnecting(false);
-        if (stompClientRef.current) { // Evitar mensaje de error en desmontaje intencional
+        if (stompClientRef.current) {
+          // Evitar mensaje de error en desmontaje intencional
           setConnectionError("Chat desconectado. Intentando reconectar...");
         }
         stompClientRef.current = null;
@@ -132,7 +151,8 @@ const ChatContainer = ({ ticketId, chatId }) => {
         console.error("ChatContainer: Error STOMP:", frame);
         setIsConnected(false);
         setIsConnecting(false);
-        const errorMsg = frame.headers['message'] || frame.body || "Error STOMP desconocido.";
+        const errorMsg =
+          frame.headers["message"] || frame.body || "Error STOMP desconocido.";
         setConnectionError(`Error STOMP: ${errorMsg}`);
         toast.error(`Error de chat (STOMP): ${errorMsg}`);
       },
@@ -140,7 +160,9 @@ const ChatContainer = ({ ticketId, chatId }) => {
         console.error("ChatContainer: Error de WebSocket:", event);
         setIsConnected(false);
         setIsConnecting(false);
-        setConnectionError("Error de conexión WebSocket. Intentando reconectar...");
+        setConnectionError(
+          "Error de conexión WebSocket. Intentando reconectar..."
+        );
       },
     });
 
@@ -161,34 +183,43 @@ const ChatContainer = ({ ticketId, chatId }) => {
   }, [ticketId, chatId, loadChatHistory]); // No es necesario getTokenFromAuthService si es estable
 
   // Función para enviar mensajes (llamada por ChatComponent)
-  const handleSendMessage = useCallback(async (messageContent, files) => {
-    if (!isConnected || (!messageContent.trim() && (!files || files.length === 0))) {
-      toast.warn("Conéctate o escribe un mensaje para enviar.");
-      return;
-    }
-    if (!ticketId) {
-      toast.error("Error: ID de ticket no disponible.");
-      return;
-    }
+  const handleSendMessage = useCallback(
+    async (messageContent, files) => {
+      if (
+        !isConnected ||
+        (!messageContent.trim() && (!files || files.length === 0))
+      ) {
+        toast.warn("Conéctate o escribe un mensaje para enviar.");
+        return;
+      }
+      if (!ticketId) {
+        toast.error("Error: ID de ticket no disponible.");
+        return;
+      }
 
-    const fileToSend = files && files.length > 0 ? files[0] : null;
+      const fileToSend = files && files.length > 0 ? files[0] : null;
 
-    try {
-      console.log(`ChatContainer: Enviando mensaje HTTP POST para ticket ${ticketId}`);
-      // postChatMessage en ChatService.js ya debe manejar la autenticación
-      // El backend espera ChatMessageCreateDto que solo tiene 'content'.
-      // El 'ticketId' va en la URL. El 'file' se maneja como Multipart.
-      await postChatMessage(ticketId, messageContent, fileToSend);
-      // No es necesario enviar un mensaje STOMP aquí. El backend lo hace.
-      // ChatComponent limpiará sus inputs si esta promesa se resuelve.
-    } catch (error) {
-      console.error("ChatContainer: Error enviando mensaje HTTP:", error);
-      const errorMsg = error.response?.data?.message || "Fallo al enviar el mensaje.";
-      // No actualices connectionError aquí, ya que es un error de envío, no de conexión general.
-      toast.error(errorMsg);
-      throw error; // Re-lanzar para que ChatComponent sepa que falló y no limpie los inputs
-    }
-  }, [isConnected, ticketId]);
+      try {
+        console.log(
+          `ChatContainer: Enviando mensaje HTTP POST para ticket ${ticketId}`
+        );
+        // postChatMessage en ChatService.js ya debe manejar la autenticación
+        // El backend espera ChatMessageCreateDto que solo tiene 'content'.
+        // El 'ticketId' va en la URL. El 'file' se maneja como Multipart.
+        await postChatMessage(ticketId, messageContent, fileToSend);
+        // No es necesario enviar un mensaje STOMP aquí. El backend lo hace.
+        // ChatComponent limpiará sus inputs si esta promesa se resuelve.
+      } catch (error) {
+        console.error("ChatContainer: Error enviando mensaje HTTP:", error);
+        const errorMsg =
+          error.response?.data?.message || "Fallo al enviar el mensaje.";
+        // No actualices connectionError aquí, ya que es un error de envío, no de conexión general.
+        toast.error(errorMsg);
+        throw error; // Re-lanzar para que ChatComponent sepa que falló y no limpie los inputs
+      }
+    },
+    [isConnected, ticketId]
+  );
 
   return (
     <ChatComponent

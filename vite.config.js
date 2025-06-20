@@ -13,7 +13,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target:
+          "https://serdiappback-hfe8a2f7bgcybacz.eastus-01.azurewebsites.net",
         changeOrigin: true,
       },
     },

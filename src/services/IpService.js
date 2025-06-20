@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_BASE_URL = "http://localhost:8080/api"; //update the base url
+const REST_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Helper function to get the token from localStorage
 const token = () => localStorage.getItem("authToken");
@@ -38,7 +38,6 @@ const getHeaders = () => {
 
 export const listAllIps = () =>
   axios.get(`${REST_API_BASE_URL}/ip`, getHeaders());
-
 
 export const postIp = (ip) =>
   axios.post(`${REST_API_BASE_URL}/ip`, ip, getHeaders());
