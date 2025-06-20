@@ -53,7 +53,7 @@ const MicrosoftSignUp = () => {
       await signUp(userData);
 
       // Si el registro es exitoso, hacer login
-      // const respuesta = await login(loginData);
+      const respuesta = await login(loginData);
       localStorage.setItem("authToken", JSON.stringify(respuesta.data));
       navigate("/dashboard");
       toast.success("Registro exitoso! Redirigiendo...");
