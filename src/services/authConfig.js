@@ -1,29 +1,30 @@
 export const msalConfig = {
-    auth: {
-        clientId: "542b1ade-0aac-497a-9646-fb7f45a577b9",
-        authority: "https://login.microsoftonline.com/410adee4-b811-40a9-8a94-49b729819135",
-        redirectUri: "http://localhost:3000/"
-    },
-    cache: {
-        cacheLocation: "sessionStorage", // This configures where your cache will be stored
-        storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
-    },
-    system: {	
-        allowNativeBroker:false	
-    }
+  auth: {
+    clientId: "542b1ade-0aac-497a-9646-fb7f45a577b9",
+    authority:
+      "https://login.microsoftonline.com/410adee4-b811-40a9-8a94-49b729819135",
+    redirectUri: "https://gray-meadow-01828ba0f.2.azurestaticapps.net",
+  },
+  cache: {
+    cacheLocation: "sessionStorage", // This configures where your cache will be stored
+    storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+  },
+  system: {
+    allowNativeBroker: false,
+  },
 };
 
 export const handleSignIn = () => {
-    instance.loginRedirect({
-      scopes: ['user.read'],
-      prompt: 'select_account'
-    });
-  };
+  instance.loginRedirect({
+    scopes: ["user.read"],
+    prompt: "select_account",
+  });
+};
 
 export const loginRequest = {
-    scopes: ["User.Read"],
+  scopes: ["User.Read"],
 };
 
 export const graphConfig = {
-    graphMeEndpoint: "https://graph.microsoft.com/v1.0/me"
+  graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
 };
