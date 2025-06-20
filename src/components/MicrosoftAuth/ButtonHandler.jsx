@@ -52,7 +52,7 @@ export const UseLoginHandler = () => {
     }
   };
 
-  return { handleLogin, valor };
+  return { handleLogin };
 };
 
 export const UseLogoutHandler = () => {
