@@ -5,16 +5,15 @@ import {
   UnauthenticatedTemplate,
   useMsal,
 } from "@azure/msal-react";
-import { TbBulb } from "react-icons/tb";
 import { LiaUserAstronautSolid } from "react-icons/lia";
 import { Button, Transition } from "@headlessui/react";
-import { 
-  FaRegHandPeace, 
-  FaUserPlus, 
-  FaSignInAlt, 
+import {
+  FaRegHandPeace,
+  FaUserPlus,
+  FaSignInAlt,
   FaSync,
   FaChevronLeft,
-  FaChevronRight
+  FaChevronRight,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UseLoginHandler } from "../components/MicrosoftAuth/ButtonHandler";
@@ -41,7 +40,7 @@ const Dashboard = () => {
 const AuthPrompt = () => {
   const { handleLogin, valor } = UseLoginHandler();
   console.log(valor);
-  
+
   return (
     <>
       <Transition
@@ -107,9 +106,9 @@ const ProfileContent = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  
+
   const { accounts } = useMsal();
-  const userEmail = accounts[0]?.username || '';
+  const userEmail = accounts[0]?.username || "";
 
   // Función para obtener los tickets del usuario con paginación
   const fetchUserTickets = async (page = currentPage, size = itemsPerPage) => {
@@ -117,9 +116,9 @@ const ProfileContent = () => {
       setLoading(true);
       const responseUser = await getUserId(userEmail);
       const userId = responseUser.data;
-      const response = await listTicketsByUser(userId, page, "",size);
+      const response = await listTicketsByUser(userId, page, "", size);
       console.log(response.data);
-      
+
       setTickets(response.data.content);
       setTotalPages(response.data.totalPages);
       setTotalItems(response.data.totalElements);
@@ -153,26 +152,33 @@ const ProfileContent = () => {
 
   // Función para obtener la etiqueta de prioridad
   const getPriorityLabel = (priority) => {
-    switch(priority) {
-      case 1: return 'Alta';
-      case 2: return 'Media';
-      case 3: return 'Baja';
-      default: return 'Desconocida';
+    switch (priority) {
+      case 1:
+        return "Alta";
+      case 2:
+        return "Media";
+      case 3:
+        return "Baja";
+      default:
+        return "Desconocida";
     }
   };
 
   // Función para obtener la etiqueta de estado
   const getStatusLabel = (status) => {
-    switch(status) {
-      case 1: return 'En Proceso';
-      case 2: return 'Cerrado';
-      default: return status;
+    switch (status) {
+      case 1:
+        return "En Proceso";
+      case 2:
+        return "Cerrado";
+      default:
+        return status;
     }
   };
 
   // Función para formatear la fecha
   const formatDate = (dateString) => {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
@@ -201,15 +207,13 @@ const ProfileContent = () => {
             </div>
           </div>
         </Button>
-        
+
         <a
           href="/knowledge/home"
           className="flex w-96 min-h-30 h-fit bg-white m-2 p-1 justify-center rounded text-decoration-none text-black hover:shadow-md transition-shadow"
         >
           <div className="flex flex-row w-90 ">
-            <div className="row-1 mt-auto mb-auto">
-              <TbBulb className="fs-1 text-yellow-500" />
-            </div>
+            <div className="row-1 mt-auto mb-auto"></div>
             <div className="row-2 p-1">
               <h4 className="text-lg font-semibold">Base de conocimientos</h4>
               <div className="border-l-blue-900 border-l-3 p-1 text-sm">
@@ -218,11 +222,11 @@ const ProfileContent = () => {
             </div>
           </div>
         </a>
-        
-        <CreateTicket 
-          open={openDialog} 
-          setOpen={setOpenDialog} 
-          onTicketCreated={() => fetchUserTickets(currentPage, itemsPerPage)} 
+
+        <CreateTicket
+          open={openDialog}
+          setOpen={setOpenDialog}
+          onTicketCreated={() => fetchUserTickets(currentPage, itemsPerPage)}
         />
       </div>
 
@@ -245,17 +249,17 @@ const ProfileContent = () => {
                 <option value="50">50</option>
               </select>
             </div>
-            <button 
+            <button
               onClick={() => fetchUserTickets(currentPage, itemsPerPage)}
               className="flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
               disabled={loading}
             >
-              <FaSync className={`mr-1 ${loading ? 'animate-spin' : ''}`} />
+              <FaSync className={`mr-1 ${loading ? "animate-spin" : ""}`} />
               Actualizar
             </button>
           </div>
         </div>
-        
+
         {loading ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
@@ -263,7 +267,9 @@ const ProfileContent = () => {
           </div>
         ) : tickets.length === 0 ? (
           <div className="bg-gray-50 rounded-lg p-8 text-center">
-            <p className="text-gray-600 mb-4">No has creado ningún ticket aún</p>
+            <p className="text-gray-600 mb-4">
+              No has creado ningún ticket aún
+            </p>
             <Button
               onClick={() => setOpenDialog(true)}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
@@ -277,32 +283,53 @@ const ProfileContent = () => {
               <table className="min-w-full bg-white">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">ID</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Título</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Estado</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Fecha de creación</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Fecha de expiración</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Prioridad</th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      ID
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      Título
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      Estado
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      Fecha de creación
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      Fecha de expiración
+                    </th>
+                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+                      Prioridad
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {tickets.map(ticket => (
-                    <tr key={ticket.id} className="border-b hover:bg-gray-50 transition-colors">
-                      <td className="py-3 px-4 text-sm text-gray-600">#{ticket.id}</td>
+                  {tickets.map((ticket) => (
+                    <tr
+                      key={ticket.id}
+                      className="border-b hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="py-3 px-4 text-sm text-gray-600">
+                        #{ticket.id}
+                      </td>
                       <td className="py-3 px-4">
-                        <Link 
-                          to={`/helpdesk/task/${ticket.id}`} 
+                        <Link
+                          to={`/helpdesk/task/${ticket.id}`}
                           className="text-blue-600 hover:text-blue-800 hover:underline transition-colors text-decoration-none"
                         >
                           {ticket.tema}
                         </Link>
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          ticket.estado === 1 ? 'bg-yellow-100 text-yellow-800' :
-                          ticket.estado === 2 ? 'bg-gray-100 text-gray-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            ticket.estado === 1
+                              ? "bg-yellow-100 text-yellow-800"
+                              : ticket.estado === 2
+                              ? "bg-gray-100 text-gray-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
                           {getStatusLabel(ticket.estado)}
                         </span>
                       </td>
@@ -313,11 +340,15 @@ const ProfileContent = () => {
                         {formatDate(ticket.fechaVencimiento)}
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          ticket.prioridad === 1 ? 'bg-red-100 text-red-800' :
-                          ticket.prioridad === 2 ? 'bg-orange-100 text-orange-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            ticket.prioridad === 1
+                              ? "bg-red-100 text-red-800"
+                              : ticket.prioridad === 2
+                              ? "bg-orange-100 text-orange-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
                           {getPriorityLabel(ticket.prioridad)}
                         </span>
                       </td>
@@ -326,36 +357,33 @@ const ProfileContent = () => {
                 </tbody>
               </table>
             </div>
-            
+
             {/* Paginación */}
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4 py-3 border-t border-gray-200">
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-                Mostrando {Math.min(itemsPerPage, tickets.length)} de {totalItems} tickets
+                Mostrando {Math.min(itemsPerPage, tickets.length)} de{" "}
+                {totalItems} tickets
               </div>
-              
+
               <div className="flex items-center">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 0}
                   className={`p-2 rounded ${
-                    currentPage === 0 
-                      ? 'text-gray-300 cursor-not-allowed' 
-                      : 'text-gray-600 hover:bg-gray-100'
+                    currentPage === 0
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <FaChevronLeft />
                 </button>
-                
+
                 <div className="flex space-x-1 mx-2">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    const pageIndex = Math.max(
-                      0, 
-                      Math.min(
-                        totalPages - 5, 
-                        currentPage - 2
-                      )
-                    ) + i;
-                    
+                    const pageIndex =
+                      Math.max(0, Math.min(totalPages - 5, currentPage - 2)) +
+                      i;
+
                     if (pageIndex < totalPages) {
                       return (
                         <button
@@ -363,8 +391,8 @@ const ProfileContent = () => {
                           onClick={() => handlePageChange(pageIndex)}
                           className={`px-3 py-1 rounded ${
                             currentPage === pageIndex
-                              ? 'bg-blue-500 text-white'
-                              : 'text-gray-600 hover:bg-gray-100'
+                              ? "bg-blue-500 text-white"
+                              : "text-gray-600 hover:bg-gray-100"
                           }`}
                         >
                           {pageIndex + 1}
@@ -374,14 +402,14 @@ const ProfileContent = () => {
                     return null;
                   })}
                 </div>
-                
+
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage >= totalPages - 1}
                   className={`p-2 rounded ${
                     currentPage >= totalPages - 1
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <FaChevronRight />

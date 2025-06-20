@@ -12,7 +12,7 @@ const MicrosoftSignUp = () => {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  
+
   const handleSignIn = async () => {
     try {
       setIsSigningIn(true);
@@ -21,14 +21,14 @@ const MicrosoftSignUp = () => {
 
       // 1. Autenticación con Microsoft
       const response = await instance.loginPopup(loginRequest);
-      
+
       if (!response?.accessToken) {
         throw new Error("No se pudo obtener el token de acceso");
       }
 
       // 2. Obtener datos del usuario
       const graphResponse = await callMsGraph(response.accessToken);
-      
+
       if (!graphResponse?.userPrincipalName) {
         throw new Error("Datos de usuario incompletos");
       }
@@ -51,22 +51,22 @@ const MicrosoftSignUp = () => {
 
       // Intento de registro
       await signUp(userData);
-      
+
       // Si el registro es exitoso, hacer login
-      const respuesta = await login(loginData);
+      // const respuesta = await login(loginData);
       localStorage.setItem("authToken", JSON.stringify(respuesta.data));
       navigate("/dashboard");
       toast.success("Registro exitoso! Redirigiendo...");
-
     } catch (error) {
       let errorMessage = "Error desconocido";
-      
+
       // Manejo específico de errores
       if (error.response) {
         // Error del backend
         const { status, data } = error.response;
-        
-        if (status === 401) { // Suponiendo que 409 es el código para conflicto (usuario existente)
+
+        if (status === 401) {
+          // Suponiendo que 409 es el código para conflicto (usuario existente)
           errorMessage = data.mensaje || "El usuario ya existe";
         } else {
           errorMessage = data.mensaje || `Error del servidor (${status})`;
@@ -80,7 +80,6 @@ const MicrosoftSignUp = () => {
       toast.error(errorMessage);
       setError(errorMessage);
       console.error("Error en el registro:", error);
-
     } finally {
       setIsSigningIn(false);
     }
@@ -94,7 +93,7 @@ const MicrosoftSignUp = () => {
       enter="transition-opacity duration-1000"
       enterFrom="opacity-0"
       enterTo="opacity-100"
-      >
+    >
       <div className="h-45 w-full flex flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
         <div className="mt-8 bg-gray-50 sm:rounded-lg sm:w-full sm:max-w-md">
           <div className="pt-4 pb-4 py-8 px-4 shadow sm:rounded-lg sm:px-10">

@@ -37,24 +37,13 @@ const getHeaders = () => {
   };
 };
 
-export const listUsers = (departamento) =>
-{
-  
+export const listUsers = (departamento) => {
   if (departamento) {
     return axios
-      .get(`${REST_API_BASE_URL}/users/departamento/${departamento}`, getHeaders()) // Add headers to the request
-      .then((response) => response)
-      .catch((error) => {
-        if (!error.response) {
-          toast.error("Error de conexión con el servidor");
-          throw new Error("Error de conexion con el servidor");
-        }
-        throw error;
-      });  
-  }
-
-  return axios
-      .get(`${REST_API_BASE_URL}/users`, getHeaders()) // Add headers to the request
+      .get(
+        `${REST_API_BASE_URL}/users/departamento/${departamento}`,
+        getHeaders()
+      ) // Add headers to the request
       .then((response) => response)
       .catch((error) => {
         if (!error.response) {
@@ -63,8 +52,20 @@ export const listUsers = (departamento) =>
         }
         throw error;
       });
-}
-  
+  }
+
+  return axios
+    .get(`${REST_API_BASE_URL}/users`, getHeaders()) // Add headers to the request
+    .then((response) => response)
+    .catch((error) => {
+      if (!error.response) {
+        toast.error("Error de conexión con el servidor");
+        throw new Error("Error de conexion con el servidor");
+      }
+      throw error;
+    });
+};
+
 export const signUp = (userData) =>
   axios.post(`${REST_API_BASE_URL}/auth/signup`, userData);
 

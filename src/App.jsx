@@ -22,7 +22,7 @@ import Task from "./pages/Knowledge/Task";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
-import  Eliminados  from "./pages/Knowledge/Eliminados";
+import Eliminados from "./pages/Knowledge/Eliminados";
 import { Toaster } from "sonner";
 import { Incidencias } from "./pages/Helpdesk/Incidencias";
 import { Departamentos } from "./pages/Helpdesk/Departamentos";
@@ -33,9 +33,7 @@ import { AddDepartamento } from "./components/Generic/AddDepartamento";
 import { AddPrioridad } from "./components/Generic/AddPrioridades";
 import { AddMotivo } from "./components/Generic/AddMotivos";
 import { AddIncidencia } from "./components/Generic/AddIncidencias";
-import {UsuariosGH} from "./pages/Knowledge/Users"; 
 import Perfil from "./components/Users/Perfil";
-import { ListedUsers } from "./components/Users/ListUsers";
 
 function Layout() {
   const isAuthenticated = localStorage.getItem("authToken");
@@ -101,7 +99,10 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/helpdesk/tasks" element={<Tasks />} />
-            <Route path="/helpdesk/mytickets" element={<Tasks userTicketsOnly={true}/>} />
+            <Route
+              path="/helpdesk/mytickets"
+              element={<Tasks userTicketsOnly={true} />}
+            />
             <Route path="/helpdesk/completados/:estado" element={<Tasks />} />
             <Route path="/helpdesk/en-proceso/:estado" element={<Tasks />} />
             <Route path="/helpdesk/task/:id" element={<TaskDetails />} />
@@ -113,16 +114,25 @@ function App() {
             <Route path="/knowledge/task" element={<Task />} />
             <Route path="/knowledge/people" element={<People />} />
             <Route path="/knowledge/repository" element={<Repository />} />
-            <Route path="/knowledge/eliminados" element={<Eliminados />}/>
+            <Route path="/knowledge/eliminados" element={<Eliminados />} />
           </Route>
         </Route>
 
         {/* Rutas protegidas específicas para Administradores */}
         <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
           <Route element={<Layout />}>
-            <Route path="/admin/helpdesk/users/add-user" element={<UsersComponent/>} />
-            <Route path="/admin/knowledge/edit-user/:id" element={<UsersComponent modulo={2}/>} />
-            <Route path="/admin/edit-user/:id" element={<UsersComponent modulo={1}/>} />
+            <Route
+              path="/admin/helpdesk/users/add-user"
+              element={<UsersComponent />}
+            />
+            <Route
+              path="/admin/knowledge/edit-user/:id"
+              element={<UsersComponent modulo={2} />}
+            />
+            <Route
+              path="/admin/edit-user/:id"
+              element={<UsersComponent modulo={1} />}
+            />
             <Route
               path="/admin/helpdesk/incidencias"
               element={<Incidencias />}
@@ -156,7 +166,7 @@ function App() {
             />
             <Route
               path="/admin/usuarios/todos"
-              element={<Users /> /* Componente para gestionar usuarios */ }
+              element={<Users /> /* Componente para gestionar usuarios */}
             ></Route>
             {/* Ejemplo: si es solo para admin */}
           </Route>
