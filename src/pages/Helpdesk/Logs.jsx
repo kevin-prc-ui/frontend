@@ -43,29 +43,48 @@ export const Logs = () => {
     setCurrentPage(1);
   };
 
-  // Función para formatear fechas de forma amigable
+  // Función para formatear fechas de forma amigable y consistente en UTC-7
   const formatDate = (dateString) => {
     if (!dateString) return '';
+
+    const timeZone = 'Etc/GMT+7'; // Corresponde a UTC-7. El signo + es correcto para Etc/GMT.
+
     const date = new Date(dateString);
-    const today = new Date();
+    const now = new Date();
+
+    // Helper para obtener la fecha en formato YYYY-MM-DD en la zona horaria deseada
+    const toDateStringInTimeZone = (d) => {
+      // El locale 'en-CA' convenientemente da el formato YYYY-MM-DD
+      return d.toLocaleDateString('en-CA', { timeZone });
+    };
+
+    const datePart = toDateStringInTimeZone(date);
+    const todayPart = toDateStringInTimeZone(now);
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayPart = toDateStringInTimeZone(yesterday);
     
-    // Comprobar si es hoy
-    if (date.toDateString() === today.toDateString()) {
-      return `Hoy a las ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    // Comprobar si es hoy (en UTC-7)
+    if (datePart === todayPart) {
+      return `Hoy a las ${date.toLocaleTimeString('es-ES', { timeZone, hour: '2-digit', minute: '2-digit' })}`;
     }
     
-    // Comprobar si es ayer
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    if (date.toDateString() === yesterday.toDateString()) {
-      return `Ayer a las ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    // Comprobar si es ayer (en UTC-7)
+    if (datePart === yesterdayPart) {
+      return `Ayer a las ${date.toLocaleTimeString('es-ES', { timeZone, hour: '2-digit', minute: '2-digit' })}`;
     }
     
+    // Para la comparación de año, obtener el año en la zona horaria de destino
+    const dateYear = date.toLocaleDateString('en-US', { timeZone, year: 'numeric' });
+    const todayYear = now.toLocaleDateString('en-US', { timeZone, year: 'numeric' });
+
     // Formato para fechas anteriores
     return date.toLocaleDateString('es-ES', {
+      timeZone,
       day: 'numeric',
       month: 'short',
-      year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
+      year: dateYear !== todayYear ? 'numeric' : undefined,
       hour: '2-digit',
       minute: '2-digit'
     });
